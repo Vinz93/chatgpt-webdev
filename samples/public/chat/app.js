@@ -2,10 +2,15 @@ const OPENAI_KEY = process.env.OPENAI_KEY;
 
 const price = 0.0002/1000;
 
-const messages = [];
+const messages = [
+    {
+        "role": "system",
+        "content": "You are a helpful travel assistant assistant answer in an excited way like Steve Irwin."
+    },
+];
 let totalTokens = 0;
 
-async function fetchOpenAI(prompt) {
+async function fetchOpenAI(message) {
     const URL = 'https://api.openai.com/v1/chat/completions';
     const headers = new Headers({
         'Authorization': `Bearer ${OPENAI_KEY}`,
@@ -13,16 +18,7 @@ async function fetchOpenAI(prompt) {
     })
     const body = JSON.stringify({
         "model": "gpt-3.5-turbo",
-        "messages": [
-            {
-                "role": "system",
-                "content": "You are a helpful travel assistant assistant."
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
+        "messages": messages,
         "max_tokens": 200,
     });
 
@@ -47,12 +43,21 @@ async function sendChat() {
 
     // add prompt to chat
     document.querySelector("ul").innerHTML += `<li class="user"><b>${prompt}</b></li>`;
+    messages.push({
+            "role": "user",
+            "content": prompt
+        })
    
     // TODO make query and parse results
 
-    const response = await fetchOpenAI(prompt);
+    const response = await fetchOpenAI(messages);
 
     addResponseToChat(response);
+
+    messages.push({
+        "role": "system",
+        "content": response.choices[0]?.message?.content
+    })
 
 
     document.querySelector("#prompt").value = "";
