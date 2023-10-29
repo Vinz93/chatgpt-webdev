@@ -27,11 +27,11 @@ ul {
     padding-bottom: 50px;
 }
 
-ul li::before {
+ul li.ai::before {
     content: '🤖'
 }
 
-ul li:has(b)::before {
+ul li.user:has(b)::before {
     content: '🧑'
 }
 

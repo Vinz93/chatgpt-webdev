@@ -16,13 +16,14 @@ async function fetchOpenAI(prompt) {
         "messages": [
             {
                 "role": "system",
-                "content": "You are a helpful assistant."
+                "content": "You are a helpful travel assistant assistant."
             },
             {
                 "role": "user",
                 "content": prompt
             }
-        ]
+        ],
+        "max_tokens": 200,
     });
 
     const response = await fetch(URL, {
@@ -34,15 +35,25 @@ async function fetchOpenAI(prompt) {
     return response.json();
 }
 
+function addResponseToChat(response) {
+    const firstChoiceMessage = response.choices[0]?.message?.content ?? 'Something went wrong.';
+
+    document.querySelector("ul").innerHTML += `<li class="ai">${firstChoiceMessage}</li>`;
+}
+
 async function sendChat() {
     const prompt = document.querySelector("#prompt").value;
     document.querySelector("#prompt").value = "";
+
+    // add prompt to chat
+    document.querySelector("ul").innerHTML += `<li class="user"><b>${prompt}</b></li>`;
    
     // TODO make query and parse results
 
     const response = await fetchOpenAI(prompt);
 
-    console.log(response);
+    addResponseToChat(response);
+
 
     document.querySelector("#prompt").value = "";
     document.querySelector("input").focus();
