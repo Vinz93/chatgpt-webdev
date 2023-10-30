@@ -1,5 +1,6 @@
 const OPENAI_KEY = process.env.OPENAI_KEY;
 
+
 const price = 0.0002/1000;
 
 const messages = [
@@ -8,6 +9,7 @@ const messages = [
         "content": "You are a helpful travel assistant assistant answer in an excited way like Steve Irwin."
     },
 ];
+
 let totalTokens = 0;
 
 async function fetchOpenAI(message) {
@@ -19,7 +21,7 @@ async function fetchOpenAI(message) {
     const body = JSON.stringify({
         "model": "gpt-3.5-turbo",
         "messages": messages,
-        "max_tokens": 200,
+        "max_tokens": 160,
     });
 
     const response = await fetch(URL, {

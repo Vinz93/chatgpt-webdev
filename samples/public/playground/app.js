@@ -1,7 +1,6 @@
 
-async function send() {
-    const prompt = document.querySelector("#prompt").value;
 
+async function fetchInternalServer(prompt) {
     const response = await fetch("/api/general", {
         method: 'POST',
         headers: {
@@ -10,7 +9,16 @@ async function send() {
         body: JSON.stringify({prompt})
     })
     const output = await response.json();
-    document.querySelector("output").textContent = output;
+
+    return output;
+}
+
+async function send() {
+    const prompt = document.querySelector("#prompt").value;
 
 
+    const response = fetchInternalServer(prompt);
+
+
+    document.querySelector("output").textContent = response;
 }
