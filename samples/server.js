@@ -1,15 +1,24 @@
-
-
-// const OPENAI_KEY = "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";
-
+require('dotenv').config()
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
-const app = express();
+const OpenAI = require('openai')
 
+
+
+const app = express();
 app.use(express.json()); // parse JSON requests
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+const OPENAI_KEY = process.env.OPENAI_KEY;
+
+const openAIConfig = new OpenAI.Configuration({
+  apiKey: OPENAI_KEY,
+})
+const openai = new OpenAI.OpenAIApi(openAIConfig);
 
 
 app.post('/api/chat', async (req, res) => {
@@ -17,7 +26,21 @@ app.post('/api/chat', async (req, res) => {
 });
 
 app.post('/api/general', async (req, res) => {
-  
+
+  const prompt = req.body.prompt;
+
+  const response = await openai.createChatCompletion({
+    model: 'gpt-3.5-turbo',
+    messages: [
+      {
+        "role": "user",
+        "content": prompt
+      },
+    ]
+  })
+  // 👆 great example to handle response with Zod
+
+  return res.json(response?.data?.choices[0]?.message?.content ?? 'Something went wrong.') 
 });
 
 app.post('/api/image', async (req, res) => {

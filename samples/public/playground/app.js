@@ -17,7 +17,7 @@ async function send() {
     const prompt = document.querySelector("#prompt").value;
 
 
-    const response = fetchInternalServer(prompt);
+    const response = await fetchInternalServer(prompt);
 
 
     document.querySelector("output").textContent = response;
