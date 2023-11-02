@@ -46,10 +46,16 @@ app.post('/api/general', async (req, res) => {
 });
 
 app.post('/api/image', async (req, res) => {
-  
+
+   const prompt = req.body.prompt;
+
+   const response = await openai.images.generate({ prompt, n: 1 });
+
+   return res.json({ url: response?.data[0]?.url })
 })
 
 app.post('/api/recipe', async (req, res) => {
+  
   
 });
 
