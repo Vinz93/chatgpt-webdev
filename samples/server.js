@@ -5,7 +5,7 @@ const cors = require('cors');
 const OpenAI = require('openai')
 
 
-
+// Express setup
 const app = express();
 app.use(express.json()); // parse JSON requests
 app.use(cors());
@@ -36,7 +36,9 @@ app.post('/api/general', async (req, res) => {
         "role": "user",
         "content": prompt
       },
-    ]
+    ],
+    temperature: 0,
+    max_tokens: 120,
   })
   // 👆 great example to handle response with Zod
 
