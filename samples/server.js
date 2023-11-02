@@ -9,7 +9,10 @@ const OpenAI = require('openai')
 const app = express();
 app.use(express.json()); // parse JSON requests
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
+// in order to switch between examples, you need to change the static path
+// samples run under app.use(express.static(path.join(__dirname, 'public/chat')));
+// and the cooking example under 'public/cook'
+app.use(express.static(path.join(__dirname, 'public/cook')));
 
 
 
