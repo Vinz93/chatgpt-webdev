@@ -58,6 +58,9 @@ app.post('/api/image', async (req, res) => {
 })
 
 app.post('/api/recipe', async (req, res) => {
+
+  const ingredients = req.body.ingredients;
+  // TODO: build propmt for recipe with an specific format
   
   
 });
