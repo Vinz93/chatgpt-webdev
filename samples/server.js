@@ -58,11 +58,26 @@ app.post('/api/image', async (req, res) => {
 })
 
 app.post('/api/recipe', async (req, res) => {
-
   const ingredients = req.body.ingredients;
-  // TODO: build propmt for recipe with an specific format
+  // TODO: finish the prompt
+  const prompt = ``
+  const response = await openai.createChatCompletion({
+    model: 'gpt-3.5-turbo',
+    messages: [
+      {
+        "role": "system",
+        "content": "You are a cook expert that created recipes"
+      },
+      {
+        "role": "user",
+        "content": prompt
+      }
+    ],
+    temperature: 0,
+    max_tokens: 120,
+  })
   
-  
+  return res.json(response?.data?.choices[0]?.message?.content ?? 'Something went wrong 🤦‍♂️.')
 });
 
 app.get('/health', (req, res) => {
