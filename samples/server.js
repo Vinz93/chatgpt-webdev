@@ -57,12 +57,56 @@ app.post('/api/image', async (req, res) => {
    return res.json({ url: response?.data[0]?.url })
 })
 
+
+const recipeSample = {
+  "name": "Calamari and Shrimp Pasta",
+  "type": "Main Meal",
+  "slug": "calamari-shrimp-pasta",
+  "image": "images/original/calamari-and-shrimp-pasta.png",
+  "duration": 45,
+  "description": "A delicious and easy-to-make pasta dish featuring tender calamari and shrimp tossed in a flavorful garlic and tomato sauce.",
+  "ingredients": {
+      "Olive oil": "2 tablespoons",
+      "Garlic": "4 cloves, minced",
+      "Crushed red pepper flakes": "1/4 teaspoon",
+      "Canned crushed tomatoes": "1 can (28 ounces)",
+      "White wine": "1/2 cup",
+      "Salt": "to taste",
+      "Black pepper": "to taste",
+      "Calamari": "1 pound, cleaned and sliced into rings",
+      "Shrimp": "1 pound, peeled and deveined",
+      "Linguine": "1 pound",
+      "Fresh parsley": "1/4 cup, chopped",
+      "Lemon": "1, zested and juiced"
+  },
+  "steps": [
+      {
+          "name": "Prepare Sauce",
+          "description": "In a large skillet, heat the olive oil over medium heat. Add the minced garlic and red pepper flakes, and cook until fragrant, about 1 minute. Stir in the crushed tomatoes, white wine, salt, and black pepper. Bring to a simmer, then reduce heat and cook for 20 minutes.",
+          "timer": 20
+      },
+      {
+          "name": "Cook Pasta",
+          "description": "Meanwhile, bring a large pot of salted water to a boil. Cook the linguine according to package instructions until al dente, then drain."
+      },
+      {
+          "name": "Add Seafood",
+          "description": "Stir the calamari and shrimp into the tomato sauce, and cook for 3-4 minutes, or until the shrimp are pink and cooked through and the calamari is tender.",
+          "timer": 3
+      },
+      {
+          "name": "Toss and Serve",
+          "description": "Add the cooked linguine to the skillet with the sauce and seafood, and toss to combine. Stir in the chopped parsley, lemon zest, and lemon juice. Serve immediately."
+      }
+  ]
+}
+
 app.post('/api/recipe', async (req, res) => {
   const ingredients = req.body.ingredients;
 
   const prompt = `
     create a recipe with the list of ingredients defined in the markup.
-    <ingredients>${ingredients}</ingredients>
+    <ingredients>${JSON.stringify(ingredients)}</ingredients>
     you can include typical ingredients found in a kitchen such as salt, pepper, oil, condiments.
 
     if the list of ingredients is not empty or you can't find the ingredients inside return "false" without any other character.
@@ -70,9 +114,12 @@ app.post('/api/recipe', async (req, res) => {
     if you have found a recipe return the recipe in the following JSON format in ***
 
     ***
-    ${recipeSample}
+    ${JSON.stringify(recipeSample)}
     ***
   `
+
+  console.log(prompt);
+
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: [
@@ -86,10 +133,15 @@ app.post('/api/recipe', async (req, res) => {
       }
     ],
     temperature: 0,
-    max_tokens: 120,
+    max_tokens: 250,
   })
+
+  const recipe = response?.data?.choices[0]?.message?.content;
+
+  console.log(recipe);
+  // TODO: why is the recipe coming incomplete?
   
-  return res.json(response?.data?.choices[0]?.message?.content ?? 'Something went wrong 🤦‍♂️.')
+  return res.json(recipe ?? 'Something went wrong 🤦‍♂️.')
 });
 
 app.get('/health', (req, res) => {
