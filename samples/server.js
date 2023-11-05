@@ -59,8 +59,20 @@ app.post('/api/image', async (req, res) => {
 
 app.post('/api/recipe', async (req, res) => {
   const ingredients = req.body.ingredients;
-  // TODO: finish the prompt
-  const prompt = ``
+
+  const prompt = `
+    create a recipe with the list of ingredients defined in the markup.
+    <ingredients>${ingredients}</ingredients>
+    you can include typical ingredients found in a kitchen such as salt, pepper, oil, condiments.
+
+    if the list of ingredients is not empty or you can't find the ingredients inside return "false" without any other character.
+
+    if you have found a recipe return the recipe in the following JSON format in ***
+
+    ***
+    ${recipeSample}
+    ***
+  `
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: [
