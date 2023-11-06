@@ -52,7 +52,10 @@ app.post('/api/image', async (req, res) => {
 
    const prompt = req.body.prompt;
 
-   const response = await openai.images.generate({ prompt, n: 1 });
+   const response = await openai.createImage({ prompt, n: 1 , size: '512x512'})
+
+
+   console.log(response.data)   
 
    return res.json({ url: response?.data[0]?.url })
 })
@@ -118,8 +121,6 @@ app.post('/api/recipe', async (req, res) => {
     ***
   `
 
-  console.log(prompt);
-
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: [
@@ -133,13 +134,14 @@ app.post('/api/recipe', async (req, res) => {
       }
     ],
     temperature: 0,
-    max_tokens: 250,
+    max_tokens: 1200,
   })
 
   const recipe = response?.data?.choices[0]?.message?.content;
 
   console.log(recipe);
-  // TODO: why is the recipe coming incomplete?
+  // Note: The response could be incomplete if the max token property is not high enough
+
   
   return res.json(recipe ?? 'Something went wrong 🤦‍♂️.')
 });

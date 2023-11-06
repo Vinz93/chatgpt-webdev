@@ -17,6 +17,7 @@ app.recipeAI = async () => {
     const value = ingredients.value;
     ingredients.disabled = true;
     ingredients.value = "🤖 Our AI Chef is working...";
+    
     const response = await fetch("http://localhost:3000/api/recipe", {
         method: 'POST',
         headers: {
@@ -24,12 +25,11 @@ app.recipeAI = async () => {
         },
         body: JSON.stringify({"ingredients": value })
     })
+
     const jsonResponse = await response.json(); 
-    console.log({ jsonResponse})
     const recipe = JSON.parse(jsonResponse);
-    console.log(recipe);
+
     if (recipe!=false) {
-        app.recipes.push(recipe);
         const responseImg = await fetch("http://localhost:3000/api/image", {
             method: 'POST',
             headers: {
@@ -37,8 +37,12 @@ app.recipeAI = async () => {
             },
             body: JSON.stringify({"prompt": `A high-quality photograph of the meal ${recipe.name}: ${recipe.description}` })
         })
+        // FIX: the image URL is not being returned by the API
         const jsonImage = await responseImg.json(); 
+        console.log({ jsonImage })
         recipe.image = jsonImage.url;
+        console.log({ mutatedRecipe: recipe })
+        app.recipes.push(recipe);
         const div = document.createElement("div");
         document.getElementById("ai-recipe").appendChild(div);
         renderRecipe(div, recipe, "large");
