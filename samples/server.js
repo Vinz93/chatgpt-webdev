@@ -55,9 +55,11 @@ app.post('/api/image', async (req, res) => {
    const response = await openai.createImage({ prompt, n: 1 , size: '512x512'})
 
 
-   console.log(response.data)   
+   console.log(response.data) 
+   const url = response?.data[0]?.url 
+   console.log({ url }) 
 
-   return res.json({ url: response?.data[0]?.url })
+   return res.json({ url })
 })
 
 
