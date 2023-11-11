@@ -49,15 +49,10 @@ app.post('/api/general', async (req, res) => {
 });
 
 app.post('/api/image', async (req, res) => {
-
    const prompt = req.body.prompt;
 
    const response = await openai.createImage({ prompt, n: 1 , size: '512x512'})
-
-
-   console.log(response.data) 
-   const url = response?.data[0]?.url 
-   console.log({ url }) 
+   const url = response?.data.data[0]?.url
 
    return res.json({ url })
 })
