@@ -12,6 +12,7 @@ app.use(cors());
 // in order to switch between examples, you need to change the static path
 // samples run under app.use(express.static(path.join(__dirname, 'public/chat')));
 // and the cooking example under 'public/cook'
+// Note: an alternative is to serve the cooking app in a independent server (visual studio)
 app.use(express.static(path.join(__dirname, 'public/cook')));
 
 

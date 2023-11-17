@@ -49,8 +49,6 @@ async function sendChat() {
             "role": "user",
             "content": prompt
         })
-   
-    // TODO make query and parse results
 
     const response = await fetchOpenAI(messages);
 
